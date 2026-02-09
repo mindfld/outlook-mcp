@@ -56,11 +56,85 @@ When the app starts, follow the instructions in the terminal:
 2. Enter the code displayed in the terminal.
 3. Sign in with your Microsoft account.
 
-## Connecting an Agent
+## Connecting an Agent (Technical Details)
 
-The server runs on port **8080** by default.
+The server runs on port **8080** by default and follows the [Model Context Protocol](https://modelcontextprotocol.io/).
 
-- **SSE Endpoint**: `http://localhost:8080/mcp/sse`
-- **Message Endpoint**: `http://localhost:8080/mcp/messages`
+### 1. Initiate Session (SSE)
+To start a connection, perform a `GET` request to the SSE endpoint. This will establish a persistent stream.
+- **Endpoint**: `http://localhost:8080/mcp/sse`
 
-You can verify the server is active by visiting the SSE endpoint in a browser.
+The server will respond with an event containing the `URL` for sending subsequent messages (the "Post URL").
+
+### 2. Initialize the Server
+Once you have the Post URL, send an `initialize` request via `POST` to that URL.
+
+**Request:**
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 1,
+  "method": "initialize",
+  "params": {
+    "protocolVersion": "2024-11-05",
+    "capabilities": {},
+    "clientInfo": {
+      "name": "my-client",
+      "version": "1.0.0"
+    }
+  }
+}
+```
+
+### 3. Initialize Notification
+After receiving a successful result from the server, you **must** send an `initialized` notification.
+
+**Request:**
+```json
+{
+  "jsonrpc": "2.0",
+  "method": "notifications/initialized"
+}
+```
+
+### 4. Tool Usage Examples
+
+#### List Available Tools
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 2,
+  "method": "tools/list"
+}
+```
+
+#### Call `get_recent_emails`
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 3,
+  "method": "tools/call",
+  "params": {
+    "name": "get_recent_emails",
+    "arguments": {
+      "limit": 5
+    }
+  }
+}
+```
+
+#### Call `create_draft_response`
+```json
+{
+  "jsonrpc": "2.0",
+  "id": 4,
+  "method": "tools/call",
+  "params": {
+    "name": "create_draft_response",
+    "arguments": {
+      "email_id": "YOUR_EMAIL_ID",
+      "body": "Thank you for your email. I will look into this."
+    }
+  }
+}
+```
