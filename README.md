@@ -67,7 +67,8 @@ To start a connection, perform a `GET` request to the SSE endpoint. This will es
 The server will respond with an event containing the `URL` for sending subsequent messages (the "Post URL").
 
 ### 2. Initialize the Server
-Once you have the Post URL, send an `initialize` request via `POST` to that URL.
+Once you have established the SSE connection, send an `initialize` request via `POST` to:
+`http://localhost:8080/mcp/messages`
 
 **Request:**
 ```json
@@ -87,7 +88,8 @@ Once you have the Post URL, send an `initialize` request via `POST` to that URL.
 ```
 
 ### 3. Initialize Notification
-After receiving a successful result from the server, you **must** send an `initialized` notification.
+After receiving a successful result from the server, you **must** send an `initialized` notification via `POST` to:
+`http://localhost:8080/mcp/messages`
 
 **Request:**
 ```json
@@ -98,6 +100,9 @@ After receiving a successful result from the server, you **must** send an `initi
 ```
 
 ### 4. Tool Usage Examples
+
+All tool requests should be sent via `POST` to:
+`http://localhost:8080/mcp/messages`
 
 #### List Available Tools
 ```json
