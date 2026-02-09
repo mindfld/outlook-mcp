@@ -58,20 +58,29 @@ When the app starts, follow the instructions in the terminal:
 
 ## Connecting an Agent (Technical Details)
 
-The server runs on port **8080** by default and follows the [Model Context Protocol](https://modelcontextprotocol.io/).
+The server runs on port **8443** by default (HTTPS) and follows the [Model Context Protocol](https://modelcontextprotocol.io/).
+
+> [!NOTE]
+> The server uses a **self-signed certificate**. When connecting via `curl` or other tools, you must use the `-k` or `--insecure` flag to ignore SSL warnings.
 
 ### 1. Initiate Session (Streamable HTTP)
-To start a connection, perform a `GET` request to the stream endpoint. This returns a `text/event-stream`.
-**Important**: You must include the `Accept: text/event-stream` header.
+To start a connection, perform a `GET` request with the `Accept: text/event-stream` header.
 
-**Endpoint**: `GET http://localhost:8080/mcp/`
+**Endpoint**: `GET https://localhost:8443/mcp/`
 **Header**: `Accept: text/event-stream`
 
-### 1. Initialize the Server
+#### Example Curl
+```bash
+curl -kN -H "Accept: text/event-stream" https://localhost:8443/mcp/
+```
+
+The server will respond with an event containing your `sessionId`.
+
+### 2. Initialize the Server
 Once you have the `sessionId`, send an `initialize` request via `POST`.
 **Important**: You must include the `mcp-session-id` header.
 
-**Endpoint**: `POST http://localhost:8080/mcp/`
+**Endpoint**: `POST https://localhost:8443/mcp/`
 **Headers**: 
 - `Content-Type: application/json`
 - `mcp-session-id: <YOUR_SESSION_ID>`
@@ -95,7 +104,7 @@ Once you have the `sessionId`, send an `initialize` request via `POST`.
 
 ### 2. Tool Usage Examples
 
-All tool requests should be sent via `POST` to `http://localhost:8080/mcp/` with the `mcp-session-id` header.
+All tool requests should be sent via `POST` to `https://localhost:8443/mcp/` with the `mcp-session-id` header.
 
 **Headers**:
 - `Content-Type: application/json`
