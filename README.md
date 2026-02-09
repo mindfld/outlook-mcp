@@ -67,16 +67,7 @@ To start a connection, perform a `GET` request to the stream endpoint. This retu
 **Endpoint**: `GET http://localhost:8080/mcp/`
 **Header**: `Accept: text/event-stream`
 
-#### Example Curl
-```bash
-curl -N -H "Accept: text/event-stream" http://localhost:8080/mcp/
-```
-
-The server will respond with an event containing your `sessionId`.
-
-The server will respond with an event containing the `URL` for sending subsequent messages (the "Post URL").
-
-### 2. Initialize the Server
+### 1. Initialize the Server
 Once you have the `sessionId`, send an `initialize` request via `POST`.
 **Important**: You must include the `mcp-session-id` header.
 
@@ -102,22 +93,7 @@ Once you have the `sessionId`, send an `initialize` request via `POST`.
 }
 ```
 
-### 3. Initialize Notification
-After receiving a successful result from the server, you **must** send an `initialized` notification via `POST` to the same endpoint with the session header.
-
-**Headers**:
-- `Content-Type: application/json`
-- `mcp-session-id: <YOUR_SESSION_ID>`
-
-**Request:**
-```json
-{
-  "jsonrpc": "2.0",
-  "method": "notifications/initialized"
-}
-```
-
-### 4. Tool Usage Examples
+### 2. Tool Usage Examples
 
 All tool requests should be sent via `POST` to `http://localhost:8080/mcp/` with the `mcp-session-id` header.
 
