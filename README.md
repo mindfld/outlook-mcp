@@ -8,8 +8,8 @@ This repository contains an MCP (Model Context Protocol) server for Microsoft Ou
 - **SSE Transport**: Exposes MCP tools over HTTP, compatible with standard MCP clients.
 - **Rich Email Tools**: 
   - `get_recent_emails`: Fetch messages from the last week.
-  - `get_email_by_id`: View full message content and metadata.
-  - `delete_email_by_id`: Remove unwanted emails.
+  - `get_email_by_id`: View full message content and metadata. 
+  - `delete_email_by_id`: Remove unwanted emails. **(temporary disabled as unsafe)**
   - `create_draft_response`: Prepare replies for review.
 
 ## Architecture
