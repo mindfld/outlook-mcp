@@ -64,12 +64,12 @@ The server runs on port **8080** by default and follows the [Model Context Proto
 To start a connection, perform a `GET` request to the stream endpoint. This returns a `text/event-stream`.
 **Important**: You must include the `Accept: text/event-stream` header.
 
-**Endpoint**: `GET http://localhost:8080/mcp/mcp`
+**Endpoint**: `GET http://localhost:8080/mcp/`
 **Header**: `Accept: text/event-stream`
 
 #### Example Curl
 ```bash
-curl -N -H "Accept: text/event-stream" http://localhost:8080/mcp/mcp
+curl -N -H "Accept: text/event-stream" http://localhost:8080/mcp/
 ```
 
 The server will respond with an event containing your `sessionId`.
@@ -80,7 +80,7 @@ The server will respond with an event containing the `URL` for sending subsequen
 Once you have the `sessionId`, send an `initialize` request via `POST`.
 **Important**: You must include the `mcp-session-id` header.
 
-**Endpoint**: `POST http://localhost:8080/mcp/mcp`
+**Endpoint**: `POST http://localhost:8080/mcp/`
 **Headers**: 
 - `Content-Type: application/json`
 - `mcp-session-id: <YOUR_SESSION_ID>`
@@ -119,7 +119,7 @@ After receiving a successful result from the server, you **must** send an `initi
 
 ### 4. Tool Usage Examples
 
-All tool requests should be sent via `POST` to `http://localhost:8080/mcp/mcp` with the `mcp-session-id` header.
+All tool requests should be sent via `POST` to `http://localhost:8080/mcp/` with the `mcp-session-id` header.
 
 **Headers**:
 - `Content-Type: application/json`

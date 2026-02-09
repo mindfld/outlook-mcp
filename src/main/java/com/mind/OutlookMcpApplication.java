@@ -37,7 +37,7 @@ public class OutlookMcpApplication {
                 // Create the server with HTTP Streamable transport
                 HttpServletStreamableServerTransportProvider transport = HttpServletStreamableServerTransportProvider
                                 .builder()
-                                .mcpEndpoint("/mcp")
+                                .mcpEndpoint("/")
                                 .build();
 
                 McpServer.SyncSpecification<?> serverSpec = McpServer.sync(transport)
