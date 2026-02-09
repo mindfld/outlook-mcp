@@ -6,7 +6,7 @@ import com.microsoft.graph.models.MessageCollectionResponse;
 import com.microsoft.graph.users.item.messages.item.createreply.CreateReplyPostRequestBody;
 import io.modelcontextprotocol.server.McpServer;
 import io.modelcontextprotocol.server.McpSyncServerExchange;
-import io.modelcontextprotocol.server.transport.HttpServletSseServerTransportProvider;
+import io.modelcontextprotocol.server.transport.HttpServletStreamableServerTransportProvider;
 import io.modelcontextprotocol.spec.McpSchema;
 import io.modelcontextprotocol.spec.McpSchema.CallToolRequest;
 import io.modelcontextprotocol.spec.McpSchema.CallToolResult;
@@ -34,10 +34,10 @@ public class OutlookMcpApplication {
 
         @Bean
         public ServletRegistrationBean<HttpServlet> mcpServlet(GraphServiceClient graphClient) {
-                // Create the server with HTTP SSE transport
-                HttpServletSseServerTransportProvider transport = HttpServletSseServerTransportProvider.builder()
-                                .sseEndpoint("/sse")
-                                .messageEndpoint("/messages")
+                // Create the server with HTTP Streamable transport
+                HttpServletStreamableServerTransportProvider transport = HttpServletStreamableServerTransportProvider
+                                .builder()
+                                .mcpEndpoint("/mcp")
                                 .build();
 
                 McpServer.SyncSpecification<?> serverSpec = McpServer.sync(transport)

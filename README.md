@@ -1,6 +1,6 @@
 # Outlook MCP Server
 
-This repository contains an MCP (Model Context Protocol) server for Microsoft Outlook, built with Spring Boot and the Microsoft Graph API. It allows AI agents to interact with your emails using **SSE (HTTP) transport**.
+This repository contains an MCP (Model Context Protocol) server for Microsoft Outlook, built with Spring Boot and the Microsoft Graph API. It allows AI agents to interact with your emails using **Streamable HTTP transport**.
 
 ## Features
 
@@ -60,22 +60,24 @@ When the app starts, follow the instructions in the terminal:
 
 The server runs on port **8080** by default and follows the [Model Context Protocol](https://modelcontextprotocol.io/).
 
-### 1. Initiate Session (SSE)
-To start a connection, perform a `GET` request to the SSE endpoint. This will establish a persistent stream.
-In response you will get sessionId
+### 1. Initiate Session (Streamable HTTP)
+To start a connection, perform a `GET` request to the stream endpoint. This returns a `text/event-stream`.
+In response you will receive your `sessionId` as part of an `endpoint` event.
 
-`GET`: `http://localhost:8080/mcp/sse`
+**Endpoint**: `GET http://localhost:8080/mcp/mcp`
 
-#### Example
-``` bash
-/messages?sessionId=car0198d-d89d-4253-9d41-278dc33f0bec
+#### Example Event Response
+```text
+event: endpoint
+data: /mcp/mcp?sessionId=car0198d-d89d-4253-9d41-278dc33f0bec
 ```
 
 The server will respond with an event containing the `URL` for sending subsequent messages (the "Post URL").
 
 ### 2. Initialize the Server
-Once you have established the SSE connection, send an `initialize` request
-`POST` to: `http://localhost:8080/mcp/messages?sessionId=<YOUR_SESSION_ID>`
+Once you have the `sessionId` from the initial event, send an `initialize` request via `POST` to the given endpoint.
+
+**Endpoint**: `POST http://localhost:8080/mcp/mcp?sessionId=<YOUR_SESSION_ID>`
 
 **Content-Type** : **application/json**
 
@@ -97,8 +99,8 @@ Once you have established the SSE connection, send an `initialize` request
 ```
 
 ### 3. Initialize Notification
-After receiving a successful result from the server, you **must** send an `notification/initialized`
-`POST` to: `http://localhost:8080/mcp/messages?sessionId=<YOUR_SESSION_ID>`
+After receiving a successful result from the server, you **must** send an `initialized` notification via `POST` to:
+`http://localhost:8080/mcp/mcp?sessionId=<YOUR_SESSION_ID>`
 
 **Content-Type** : **application/json**
 
@@ -114,8 +116,7 @@ After receiving a successful result from the server, you **must** send an `notif
 ### Tool Usage Examples
 
 All tool requests should be sent via `POST` to:
-
-`POST` to: `http://localhost:8080/mcp/messages?sessionId=<YOUR_SESSION_ID>`
+`http://localhost:8080/mcp/mcp?sessionId=<YOUR_SESSION_ID>`
 
 **Content-Type** : **application/json**
 
