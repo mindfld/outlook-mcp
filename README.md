@@ -62,15 +62,24 @@ The server runs on port **8080** by default and follows the [Model Context Proto
 
 ### 1. Initiate Session (SSE)
 To start a connection, perform a `GET` request to the SSE endpoint. This will establish a persistent stream.
-- **Endpoint**: `http://localhost:8080/mcp/sse`
+In response you will get sessionId
+
+`GET`: `http://localhost:8080/mcp/sse`
+
+#### Example
+``` bash
+/messages?sessionId=car0198d-d89d-4253-9d41-278dc33f0bec
+```
 
 The server will respond with an event containing the `URL` for sending subsequent messages (the "Post URL").
 
 ### 2. Initialize the Server
-Once you have established the SSE connection, send an `initialize` request via `POST` to:
-`http://localhost:8080/mcp/messages`
+Once you have established the SSE connection, send an `initialize` request
+`POST` to: `http://localhost:8080/mcp/messages?sessionId=<YOUR_SESSION_ID>`
 
-**Request:**
+**Content-Type** : **application/json**
+
+**Request Body:**
 ```json
 {
   "jsonrpc": "2.0",
@@ -88,8 +97,10 @@ Once you have established the SSE connection, send an `initialize` request via `
 ```
 
 ### 3. Initialize Notification
-After receiving a successful result from the server, you **must** send an `initialized` notification via `POST` to:
-`http://localhost:8080/mcp/messages`
+After receiving a successful result from the server, you **must** send an `notification/initialized`
+`POST` to: `http://localhost:8080/mcp/messages?sessionId=<YOUR_SESSION_ID>`
+
+**Content-Type** : **application/json**
 
 **Request:**
 ```json
@@ -99,10 +110,14 @@ After receiving a successful result from the server, you **must** send an `initi
 }
 ```
 
-### 4. Tool Usage Examples
+### 4. After that you can start usage of tools 
+### Tool Usage Examples
 
 All tool requests should be sent via `POST` to:
-`http://localhost:8080/mcp/messages`
+
+`POST` to: `http://localhost:8080/mcp/messages?sessionId=<YOUR_SESSION_ID>`
+
+**Content-Type** : **application/json**
 
 #### List Available Tools
 ```json
