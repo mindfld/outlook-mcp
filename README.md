@@ -62,24 +62,28 @@ The server runs on port **8080** by default and follows the [Model Context Proto
 
 ### 1. Initiate Session (Streamable HTTP)
 To start a connection, perform a `GET` request to the stream endpoint. This returns a `text/event-stream`.
-In response you will receive your `sessionId` as part of an `endpoint` event.
+**Important**: You must include the `Accept: text/event-stream` header.
 
 **Endpoint**: `GET http://localhost:8080/mcp/mcp`
+**Header**: `Accept: text/event-stream`
 
-#### Example Event Response
-```text
-event: endpoint
-data: /mcp/mcp?sessionId=car0198d-d89d-4253-9d41-278dc33f0bec
+#### Example Curl
+```bash
+curl -N -H "Accept: text/event-stream" http://localhost:8080/mcp/mcp
 ```
+
+The server will respond with an event containing your `sessionId`.
 
 The server will respond with an event containing the `URL` for sending subsequent messages (the "Post URL").
 
 ### 2. Initialize the Server
-Once you have the `sessionId` from the initial event, send an `initialize` request via `POST` to the given endpoint.
+Once you have the `sessionId`, send an `initialize` request via `POST`.
+**Important**: You must include the `mcp-session-id` header.
 
-**Endpoint**: `POST http://localhost:8080/mcp/mcp?sessionId=<YOUR_SESSION_ID>`
-
-**Content-Type** : **application/json**
+**Endpoint**: `POST http://localhost:8080/mcp/mcp`
+**Headers**: 
+- `Content-Type: application/json`
+- `mcp-session-id: <YOUR_SESSION_ID>`
 
 **Request Body:**
 ```json
@@ -99,10 +103,11 @@ Once you have the `sessionId` from the initial event, send an `initialize` reque
 ```
 
 ### 3. Initialize Notification
-After receiving a successful result from the server, you **must** send an `initialized` notification via `POST` to:
-`http://localhost:8080/mcp/mcp?sessionId=<YOUR_SESSION_ID>`
+After receiving a successful result from the server, you **must** send an `initialized` notification via `POST` to the same endpoint with the session header.
 
-**Content-Type** : **application/json**
+**Headers**:
+- `Content-Type: application/json`
+- `mcp-session-id: <YOUR_SESSION_ID>`
 
 **Request:**
 ```json
@@ -112,13 +117,13 @@ After receiving a successful result from the server, you **must** send an `initi
 }
 ```
 
-### 4. After that you can start usage of tools 
-### Tool Usage Examples
+### 4. Tool Usage Examples
 
-All tool requests should be sent via `POST` to:
-`http://localhost:8080/mcp/mcp?sessionId=<YOUR_SESSION_ID>`
+All tool requests should be sent via `POST` to `http://localhost:8080/mcp/mcp` with the `mcp-session-id` header.
 
-**Content-Type** : **application/json**
+**Headers**:
+- `Content-Type: application/json`
+- `mcp-session-id: <YOUR_SESSION_ID>`
 
 #### List Available Tools
 ```json
