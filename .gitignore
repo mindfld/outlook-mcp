@@ -4,3 +4,4 @@
 target/
 cp.txt
 *.iml
+.env.example
