@@ -5,3 +5,5 @@ target/
 cp.txt
 *.iml
 .env.example
+aws-key.pem
+aws-instanse
